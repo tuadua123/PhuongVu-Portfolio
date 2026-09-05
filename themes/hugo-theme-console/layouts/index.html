@@ -1,21 +1,54 @@
 {{ define "main" }}
 
-<h1>About</h1>
-
 <p>
-Console is a minimal, responsive and light theme for Hugo inspired by Linux console.  <a href="about/">(more)</a>
+Hello, I'm Phuong and I do Game UI/UX Design.  <a href="about/">(more)</a>
 </p>
 <br/>
 
-<h1>Latest posts</h1>
+<h1>Notable projects</h1>
+<br/>
+
+<div class="project-carousel">
+    <div class="project-grid">
+        {{ with .Site.GetPage "/projects" }}
+            {{ range sort .Pages "Date" "desc" }}
+                <a href="{{ .Permalink }}"
+                   class="project-card"
+                   title="{{ .Title }}"
+                   data-title="{{ .Title }}">
+
+                    {{ $image := .Page.Resources.GetMatch .Params.image }}
+                    {{ with $image }}
+                        {{ $thumb := .Resize "400x" }}
+                        <img src="{{ $thumb.RelPermalink }}"
+                             alt="{{ .Title }}"
+                             class="img-responsive">
+                    {{ end }}
+
+                </a>
+            {{ end }}
+        {{ end }}
+    </div>
+
+    <div class="project-pagination">
+        <button type="button" id="project-prev">←</button>
+        <span id="project-page">1 / 1</span>
+        <button type="button" id="project-next">→</button>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<h1>Lastest Experience</h1>
 
 <div class="posts-list">
-{{ with .Site.GetPage "/posts" }}
+{{ with .Site.GetPage "/experience" }}
     {{ range first 3 (sort .Pages "Date" "desc" (where .Pages ".Params.private" "!=" true))}}
         <div class="post">
             <p>
-                <div class="date">{{ .Date | time.Format ":date_medium" }}</div>
-                <h1><a href="{{ .Permalink }}" title="{{ .Title }}">{{ .Title }}</a></h1>
+                <div class="date">{{ .Params.period }}</div>
+                <p style="margin-bottom: 5px;"><a href="{{ .Permalink }}" title="{{ .Title }}">{{ .Title }}</a></p>
                 {{ .Summary }}
             </p>
         </div>    
@@ -23,20 +56,75 @@ Console is a minimal, responsive and light theme for Hugo inspired by Linux cons
 {{ end }}
 </div>
 
-<h1>Latest photos</h1>
+<!-- SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll(".project-grid .project-card");
+    const prev = document.getElementById("project-prev");
+    const next = document.getElementById("project-next");
+    const page = document.getElementById("project-page");
+    const pagination = document.querySelector(".project-pagination");
 
-<div class="image-grid">
-{{ with .Site.GetPage "/photos" }}
-    {{ range first 3 (sort .Pages "Date" "desc")}}
-        <a href="{{ .Permalink }}" title="{{ .Title }}">
-        {{ $image := .Page.Resources.GetMatch .Params.image }}
-        {{ with $image }}
-            {{ $thumb := .Resize "400x" }}
-            <img src="{{ $thumb.RelPermalink }}" alt="{{ .Title }}" class="img-responsive">
-        {{end}}
-        </a>
-    {{ end }}
-{{ end }}
-</div>
+    const perPage = 3;
+    const totalPages = Math.ceil(cards.length / perPage);
+
+    let currentPage = 1;
+
+    function updateProjects() {
+        const isMobile = window.innerWidth <= 850;
+
+        if (isMobile) {
+            // Mobile: disable carousel and show everything
+            cards.forEach(function (card) {
+                card.classList.remove("project-hidden");
+            });
+
+            pagination.style.display = "none";
+
+            return;
+        }
+
+        // Desktop: enable carousel
+        pagination.style.display = "flex";
+
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
+
+        cards.forEach(function (card, index) {
+            if (index >= start && index < end) {
+                card.classList.remove("project-hidden");
+            } else {
+                card.classList.add("project-hidden");
+            }
+        });
+
+        page.textContent = currentPage + " / " + totalPages;
+
+        prev.disabled = currentPage === 1;
+        next.disabled = currentPage === totalPages;
+    }
+
+    prev.addEventListener("click", function () {
+        if (currentPage > 1) {
+            currentPage--;
+            updateProjects();
+        }
+    });
+
+    next.addEventListener("click", function () {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateProjects();
+        }
+    });
+
+    // Detect window resize
+    window.addEventListener("resize", updateProjects);
+
+    updateProjects();
+});
+</script>
+
 
 {{ end }}
+
