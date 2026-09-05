@@ -38,6 +38,7 @@
 
 body {
   font-size: var(--global-font-size);
+  font-weight: 300 !important;
   color: var(--font-color);
   line-height: var(--global-line-height);
   margin: 0;
@@ -183,11 +184,18 @@ pre code {
 }
 
 /* ===== Terminal Styling ===== */
-.terminal blockquote, .terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6, .terminal strong, .terminal .logo {
+
+.terminal blockquote {
   font-style: normal;
   font-size: var(--global-font-size);
   font-family: var(--font-stack);
   color: var(--font-color);
+}
+
+.terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6, .terminal strong, .terminal .logo {
+  font-style: normal;
+  font-size: var(--global-font-size);
+  font-family: var(--font-stack);
 }
 
 .terminal code {

@@ -1,5 +1,5 @@
 +++
-title = "Skybull Game Studio"
+title = "Golfzon Vina - R&D Branch"
 date = "2022-10-01"
 period = "2022-2025"
 +++

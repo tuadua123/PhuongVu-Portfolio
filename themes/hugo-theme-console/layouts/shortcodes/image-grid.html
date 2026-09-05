@@ -1,0 +1,6 @@
+{{- $columns := .Get "columns" | default "2" -}}
+{{- $align := .Get "align" | default "width" -}}
+
+<div class="image-grid image-grid-columns-{{ $columns }} image-grid-align-{{ $align }}">
+    {{- .Inner | markdownify -}}
+</div>

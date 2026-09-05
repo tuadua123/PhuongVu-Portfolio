@@ -1,7 +1,7 @@
 {{ define "main" }}
 <h1>{{ .Page.Title }}</h1>
 {{ .Content }}
-<div class="image-grid">
+<div class="project-grid">
     {{ range sort .Pages "Date" "desc" }}
         {{ if and (isset .Params "image") .Params.image }}
             <a href="{{ .Permalink }}" title="{{ .Title }}">
